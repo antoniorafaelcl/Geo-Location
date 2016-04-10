@@ -1,0 +1,209 @@
+<dom-module id="rotas-eventos">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+
+
+    
+		
+	</template>
+	<script>
+  (function() {
+    var watch_ = null;
+    var fetching_ = false;
+
+    Polymer({
+
+      is: 'rotas-eventos',
+
+      hostAttributes: {
+        hidden: true
+      },
+
+      properties: {
+        /**
+         * The latitude of the current position.
+         */
+        latitude: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          readOnly: true,
+          value: null
+        },
+
+        /**
+         * The longitude of the current position.
+         */
+        longitude: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          readOnly: true,
+          value: null
+        },
+
+        /**
+         * If true, the element won't be active at all
+         */
+        idle: {
+          type: Boolean,
+          value: false,
+          observer: 'fetch'
+        },
+
+        /**
+         * If true, the latitude/longitude update as the device changes position.
+         * If not set, the latitude/longitude are provided once.
+         */
+        watchPos: {
+          type: Boolean,
+          value: false,
+          observer: 'fetch'
+        },
+
+        /**
+         * If true, enables high accuracy GPS.
+         */
+        highAccuracy: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The maximumAge option in the Gelocation API.
+         */
+        maximumAge: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * The timeout option in the Gelocation API.
+         */
+        timeout: {
+          type: Number,
+          value: 5000
+        },
+
+        /**
+         * Geolocation API position object
+         */
+        position: {
+          type: Object,
+          notify: true,
+          readOnly: true,
+          value: null
+        }
+
+      },
+     /**
+       * Fired when the Geolocation API returns an error.
+       *
+       * @event geo-error
+       * @param {Object} detail
+       * @param {boolean} detail.error The error message.
+       */
+
+      /**
+       * Fired when the Geolocation API returns a position result.
+       *
+       * @event geo-response
+       * @param {Object} detail
+       *   @param {Position} position The raw position object returned by the Geolocation API.
+       *   @param {Number} detail.latitude Latitude of the current position.
+       *   @param {Number} detail.longitude Longitude of the current position.
+       */
+
+      ready: function() {
+        this.fetch();
+      },
+
+      clear: function () {
+        this._setPosition(null);
+        this._setLatitude(null);
+        this._setLongitude(null);
+      },
+
+      fetch: function () {
+        // Guard clause in case observer runs before element is ready. Refer to Polymer issue #3438
+        // https://github.com/Polymer/polymer/issues/3438
+        if (this.idle === undefined || this.watchPos === undefined) {
+          return;
+        }
+
+        if (fetching_) {
+          return;
+        }
+
+        if (watch_) {
+          navigator.geolocation.clearWatch(watch_);
+          watch_ = null;
+        }
+
+        if (this.idle) {
+          return;
+        }
+
+        fetching_ = true;
+
+        var success = this._onPosition.bind(this);
+        var error = this._onError.bind(this);
+        var options = {
+          enableHighAccuracy: this.highAccuracy,
+          timeout: this.timeout,
+          maximumAge: this.maximumAge
+        };
+
+        if (this.watchPos) {
+          watch_ = navigator.geolocation.watchPosition(success, error, options);
+        }
+        else {
+          navigator.geolocation.getCurrentPosition(success, error, options);
+        }
+      },
+
+      /**
+       * Success callback when the Geolocation API returns results.
+       *
+       * @param {Position} pos A position object from the Geolocation API.
+       */
+      _onPosition: function(pos) {
+        fetching_ = false;
+
+        this._setPosition(pos);
+        this._setLatitude(pos.coords.latitude);
+        this._setLongitude(pos.coords.longitude);
+
+        this.fire('geo-response', {
+          latitude: this.latitude,
+          longitude: this.longitude,
+          position: pos
+        });
+      },
+
+      /**
+       * Error callback when the Geolocation API returns an error.
+       *
+       * @param {Position} err The error that was returned.
+       */
+      _onError: function(err) {
+        fetching_ = false;
+
+        this.fire('geo-error', {
+          error: err.code + ': ' + err.message,
+          code: err.code
+        });
+      }
+    });
+  })();
+</script>
+</dom-module>
+
+
+
+
+
