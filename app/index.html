@@ -122,26 +122,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <rotas-eventos latitude="{{lat}}" longitude="">{{long}}</rotas-eventos>
 
 
-                <google-map map="{{map}}"></google-map>
+                <!-- <posicao-eventos></posicao-eventos> -->
+
+                <!-- <google-map map="{{map}}"></google-map>
                   <google-map-directions map="{{map}}"
-                    start-address="San Francisco" end-address="Mountain View">
-                </google-map-directions>
+                      start-address="San Francisco" end-address="Mountain View">
+                </google-map-directions> -->
+
+                <paper-toast id="toast1" duration="3000" text="Nova Localização : " >
+
+                </paper-toast>
 
                 <script>
                   var loc = document.querySelector('rotas-eventos');
                   loc.addEventListener('geo-response', function(e) {
-                    console.log('lat:' + this.latitude, 'lng:' + this.longitude);
+
+                  document.querySelector('#toast1').text = ' lat:  ' + this.latitude + '  lng: ' + this.longitude;
+
                   });
                 </script>
 
+                <paper-button raised onclick="document.querySelector('#toast1').show()">Qual é a minha localização ? </paper-button>
 
-                <paper-button raised onclick="toast1.open()">Localização</paper-button>
 
-                  <paper-toast id="toast1" duration="1000" text="Nova Localização : 'lat:'+ this.latitude, 'lng:' + this.longitude ">
-                    <paper-button onclick="toast1.toggle()" class="yellow-button">Feche</paper-button>
-                       
-                  
-                  </paper-toast>
+
+
               </paper-material>
 
             </section>

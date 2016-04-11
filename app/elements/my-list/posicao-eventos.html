@@ -1,0 +1,36 @@
+<dom-module id="posicao-eventos" >
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <paper-toast id="toast1" duration="3000" text="Nova Localização : " ></paper-toast>
+
+    <paper-button raised onclick="document.querySelector('#toast1').show()"> Qual é a minha localização ? </paper-button>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'posicao-eventos',
+        properties : {
+          localizacao: {
+            type : Object,
+            value: {longitude:'',latitude:''}
+          }
+        },
+
+        posicao: function () {
+          var loc = document.querySelector('rotas-eventos');
+          loc.addEventListener('geo-response', function(e) {
+
+          document.querySelector('#toast1').text = ' lat:  ' + loc.latitude + '  lng: ' + loc.longitude;
+
+
+          });
+        }
+
+    });
+  </script>
+</dom-module>
