@@ -1,0 +1,46 @@
+<dom-module id="my-location">
+  <template>
+    <style>
+      :host {
+        display: block;
+
+      }
+      google-map {
+        height: 600px;
+      }
+    </style>
+    <paper-button raised on-tap="localAtual">Minha localizacao</paper-button>
+
+    <google-map fit-to-markers zoom="15">
+      <google-map-marker></google-map-marker>
+      <google-map-marker></google-map-marker>
+      <google-map-directions map="{{map}}"
+      start-address="parque do povo, campina grande,pb"
+      end-address="praca da bandeira,campina grande,pb"
+      travel-mode="DRIVING"
+      ></google-map-directions>
+    </google-map>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'my-location',
+        properties: {
+          localizacao : {
+
+          }
+        },
+      localAtual: function () {
+        var mapa = document.querySelector('rotas-eventos');
+        var googleMaps = document.querySelector('google-map');
+        var googleMapsMarker = document.querySelector('google-map-marker');
+        // console.log(googleMaps.latitude);
+        console.log(mapa.latitude);
+        googleMaps.latitude = mapa.latitude;
+        googleMaps.longitude = mapa.longitude;
+        googleMapsMarker.latitude = mapa.latitude;
+        googleMapsMarker.longitude = mapa.longitude;
+      }
+    });
+  </script>
+</dom-module>

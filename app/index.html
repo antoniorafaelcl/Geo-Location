@@ -118,62 +118,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="home">
-              <paper-material elevation="1">
-                <rotas-eventos latitude="{{lat}}" longitude="">{{long}}</rotas-eventos>
-
-
-                <!-- <posicao-eventos></posicao-eventos> -->
-
-                <!-- <google-map map="{{map}}"></google-map>
-                  <google-map-directions map="{{map}}"
-                      start-address="San Francisco" end-address="Mountain View">
-                </google-map-directions> -->
-
-                <paper-toast id="toast1" duration="3000" text="Nova Localização : " >
-
-                </paper-toast>
-
-                <script>
-                  var loc = document.querySelector('rotas-eventos');
-                  loc.addEventListener('geo-response', function(e) {
-
-                  document.querySelector('#toast1').text = ' lat:  ' + this.latitude + '  lng: ' + this.longitude;
-
-                  });
-                </script>
-
-                <paper-button raised onclick="document.querySelector('#toast1').show()">Qual é a minha localização ? </paper-button>
-
-
-
-
-              </paper-material>
-
-            </section>
-
-            <section data-route="users">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Users</h1>
-                <p>This is the users section</p>
-                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
-                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
-                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
-                <a href$="{{baseUrl}}users/Sam">Sam</a>
-              </paper-material>
-            </section>
-
-            <section data-route="user-info">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">User: {{params.name}}</h1>
-                <div>This is {{params.name}}'s section</div>
-              </paper-material>
-            </section>
-
-            <section data-route="contact">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Contact</h1>
-                <p>This is the contact section</p>
-              </paper-material>
+            <paper-material elevation="1">
+              <my-location></my-location>
+              <rotas-eventos></rotas-eventos>
+            </paper-material>
             </section>
           </iron-pages>
         </div>
