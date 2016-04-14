@@ -11,36 +11,67 @@
     </style>
     <paper-button raised on-tap="localAtual">Minha localizacao</paper-button>
 
-    <google-map fit-to-markers zoom="15">
-      <google-map-marker></google-map-marker>
-      <google-map-marker></google-map-marker>
+    <google-map fit-to-markers zoom="15" map="{{map}}">
+      <google-map-marker map="{{map}}"></google-map-marker>
       <google-map-directions map="{{map}}"
-      start-address="parque do povo, campina grande,pb"
-      end-address="praca da bandeira,campina grande,pb"
-      travel-mode="DRIVING"
-      ></google-map-directions>
+            start-address={{endPartida}}
+            end-address={{endDestino}}
+            travel-mode="DRIVING">
+      </google-map-directions>
     </google-map>
 
   </template>
   <script>
     Polymer({
       is: 'my-location',
-        properties: {
-          localizacao : {
 
+
+
+        properties: {
+          endPartida: {
+            type: String,
+            value: ''
+
+          },
+          endDestino: {
+            type: String,
+            value: 'parque do povo, campina grande,pb'
           }
         },
+
+
       localAtual: function () {
         var mapa = document.querySelector('rotas-eventos');
         var googleMaps = document.querySelector('google-map');
         var googleMapsMarker = document.querySelector('google-map-marker');
+        //var googleMapsDirections = document.querySelector('google-map-directions');
+        //console.log(document.querySelector('google-map-directions'))
+
         // console.log(googleMaps.latitude);
-        console.log(mapa.latitude);
+        this.endPartida = mapa.latitude + ','+ mapa.longitude;
         googleMaps.latitude = mapa.latitude;
         googleMaps.longitude = mapa.longitude;
         googleMapsMarker.latitude = mapa.latitude;
         googleMapsMarker.longitude = mapa.longitude;
-      }
-    });
+        //googleMapsDirections.latitude = mapa.latitude;
+        //googleMapsDirections.longitude = mapa.longitude;
+        document.querySelector('google-map-directions').route();
+      },
+      ready: function () {
+
+        setTimeout(function () {
+          var googleMaps = document.querySelector('google-map');
+          var googleMapsMarker = document.querySelector('google-map-marker');
+          var mapa = document.querySelector('rotas-eventos');
+
+          this.endPartida = mapa.latitude + ','+ mapa.longitude;
+          googleMaps.latitude = mapa.latitude;
+          googleMaps.longitude = mapa.longitude;
+          googleMapsMarker.latitude = mapa.latitude;
+          googleMapsMarker.longitude = mapa.longitude;
+
+        },2000)
+    }
+});
   </script>
 </dom-module>
